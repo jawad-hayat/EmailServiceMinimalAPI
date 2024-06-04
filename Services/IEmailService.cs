@@ -33,6 +33,7 @@ namespace EmailServiceAPI.Services
                 await smtp.SendAsync(email);
                 await smtp.DisconnectAsync(true);
 
+                //test comment
                 return true;
             }
             catch (Exception ex)
