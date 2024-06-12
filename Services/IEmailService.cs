@@ -34,6 +34,7 @@ namespace EmailServiceAPI.Services
                 await smtp.DisconnectAsync(true);
 
                 //test comment
+                //test comment2
                 return true;
             }
             catch (Exception ex)
