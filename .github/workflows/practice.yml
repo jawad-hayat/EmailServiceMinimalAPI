@@ -14,9 +14,11 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore --configuration Release
+      
       - name: Test
         run: dotnet test --no-build --verbosity normal --configuration Release
       - name: Publish
+
         run: dotnet publish -c Release -o dotnetcorewebapp .\
       - name: Stop IIS
         shell: pwsh
