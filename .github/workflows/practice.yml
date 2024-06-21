@@ -1,55 +1,37 @@
 name: practice github actions
-
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      # - name: Setup .Net Core
-      #   uses: actions/setup-dotnet@v3
-      #   with:
-      #     dotnet-version: '8.x'
-
       - name: Install dependencies
         run: dotnet restore
-
       - name: Build
         run: dotnet build --no-restore --configuration Release
-
       - name: Test
         run: dotnet test --no-build --verbosity normal --configuration Release
-      
       - name: Publish
         run: dotnet publish -c Release -o dotnetcorewebapp .\
-
-      # - name: List published files
-      #   run: Get-ChildItem -Path 'c:\\actions-runner\\testing\\EmailServiceMinimalAPI\\EmailServiceMinimalAPI\\dotnetcorewebapp' -Recurse
-      #   shell: pwsh
-
       - name: Stop IIS
         run: iisreset /stop
         shell: pwsh
-
       - name: Deploy to IIS
-        run: Copy-Item -Path Get-ChildItem -Path C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\* -Recurse -Destination C:\inetpub\wwwroot\iistest -Recurse -Force
+        run: |
+          $sourcePath = 'C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\*'
+          $destinationPath = 'C:\inetpub\wwwroot\iistest'
+          Get-ChildItem -Path $sourcePath -Recurse | Copy-Item -Destination $destinationPath -Recurse -Force
         shell: pwsh
-
       - name: List files in IIS
         run: Get-ChildItem -Path C:\inetpub\wwwroot\iistest -Recurse
         shell: pwsh
-
       - name: Start IIS
         run: iisreset /start
         shell: pwsh
-
       - name: Curl the web to do smoke test
         run: curl http://localhost/iistest
