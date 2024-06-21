@@ -19,19 +19,23 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o dotnetcorewebapp .\
       - name: Stop IIS
-        run: iisreset /stop
         shell: pwsh
+        run: iisreset /stop
+        
       - name: Deploy to IIS
+        shell: pwsh
         run: |
           $sourcePath = 'C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\*'
           $destinationPath = 'C:\inetpub\wwwroot\iistest'
           Get-ChildItem -Path $sourcePath -Recurse | Copy-Item -Destination $destinationPath -Recurse -Force
-        shell: pwsh
+        
       - name: List files in IIS
+        shell: pwsh
         run: Get-ChildItem -Path C:\inetpub\wwwroot\iistest -Recurse
-        shell: pwsh
+        
       - name: Start IIS
-        run: iisreset /start
         shell: pwsh
+        run: iisreset /start
+        
       - name: Curl the web to do smoke test
         run: curl http://localhost/iistest
