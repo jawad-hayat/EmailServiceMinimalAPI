@@ -22,17 +22,17 @@ jobs:
         run: |
           Import-Module WebAdministration
           Stop-WebSite -Name "iistest"
-        shell: pwsh
+        # shell: pwsh
 
       - name: Deploy to IIS
         run: |
           $sourcePath = 'C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\*'
           $destinationPath = 'C:\inetpub\wwwroot\iistest'
           Get-ChildItem -Path $sourcePath -Recurse | Copy-Item -Destination $destinationPath -Recurse -Force
-        shell: pwsh
+        # shell: pwsh
       - name: List files in IIS
         run: Get-ChildItem -Path C:\inetpub\wwwroot\iistest -Recurse
-        shell: pwsh
+        # shell: pwsh
       - name: Start IIS
         run: net start w3svc
-        shell: pwsh
+        # shell: pwsh
