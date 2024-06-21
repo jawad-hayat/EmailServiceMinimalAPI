@@ -19,9 +19,7 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o dotnetcorewebapp .\
       - name: Stop IIS
-        run: |
-          Import-Module WebAdministration
-          Stop-WebSite -Name "iistest"
+        run: Stop-WebSite -Name "iistest"
         # shell: pwsh
 
       - name: Deploy to IIS
