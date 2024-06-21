@@ -20,7 +20,7 @@ jobs:
         run: dotnet publish -c Release -o dotnetcorewebapp .\
       - name: Stop IIS
         run: net stop w3svc
-        shell: pwsh
+        shell: cmd
       - name: Deploy to IIS
         run: |
           $sourcePath = 'C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\*'
