@@ -18,11 +18,11 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal --configuration Release
       - name: Publish
-
         run: dotnet publish -c Release -o dotnetcorewebapp .\
+      
       - name: Stop IIS
+        run: C:\Windows\System32\inetsrv\appcmd stop site /site.name:"iistest"
         shell: pwsh
-        run: iisreset /stop
         
       - name: Deploy to IIS
         shell: pwsh
