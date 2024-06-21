@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [ master ]
 
-
 jobs:
   build-and-deploy:
     runs-on: windows-latest
@@ -21,7 +20,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Install dependencies
-        run : dotnet restore
+        run: dotnet restore
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
@@ -30,14 +29,27 @@ jobs:
         run: dotnet test --no-build --verbosity normal --configuration Release
       
       - name: Publish
-        run: dotnet publish -c Release -o dotnetcorewebapp .\
+        run: dotnet publish -c Release -o dotnetcorewebapp .
+
+      - name: List published files
+        run: Get-ChildItem -Path dotnetcorewebapp -Recurse
+        shell: pwsh
+
+      - name: Stop IIS
+        run: iisreset /stop
+        shell: pwsh
 
       - name: Deploy to IIS
-        run: |
-          iisreset /stop
-          Copy-Item -Path dotnetcorewebapp\* -Destination C:\inetpub\wwwroot\iistest -Recurse -Force
-          iisreset /start
+        run: Copy-Item -Path dotnetcorewebapp\* -Destination C:\inetpub\wwwroot\iistest -Recurse -Force
+        shell: pwsh
+
+      - name: List files in IIS
+        run: Get-ChildItem -Path C:\inetpub\wwwroot\iistest -Recurse
+        shell: pwsh
+
+      - name: Start IIS
+        run: iisreset /start
         shell: pwsh
 
       - name: Curl the web to do smoke test
-        run: curl http://localhost/dotnetcore-webapp
+        run: curl http://localhost/iistest
