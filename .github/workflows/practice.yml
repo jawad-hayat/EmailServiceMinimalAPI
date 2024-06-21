@@ -40,7 +40,7 @@ jobs:
         # shell: pwsh
  
       - name: Deploy to IIS
-        run: Copy-Item Get-ChildItem -Path C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\* -Recurse -Destination C:\inetpub\wwwroot\iistest -Recurse -Force
+        run: Copy-Item -Path C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\* -Destination C:\inetpub\wwwroot\iistest -Recurse -Force
         # shell: pwsh
  
       - name: List files in IIS
