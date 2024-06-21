@@ -32,7 +32,7 @@ jobs:
         run: dotnet publish -c Release -o dotnetcorewebapp .\
 
       - name: List published files
-        run: Get-ChildItem -Path dotnetcorewebapp -Recurse
+        run: Get-ChildItem -Path C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp -Recurse
         shell: pwsh
 
       - name: Stop IIS
@@ -40,7 +40,7 @@ jobs:
         shell: pwsh
 
       - name: Deploy to IIS
-        run: Copy-Item -Path dotnetcorewebapp\* -Destination C:\inetpub\wwwroot\iistest -Recurse -Force
+        run: Copy-Item -Path Get-ChildItem -Path C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\* -Recurse -Destination C:\inetpub\wwwroot\iistest -Recurse -Force
         shell: pwsh
 
       - name: List files in IIS
