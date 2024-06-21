@@ -37,7 +37,6 @@ jobs:
  
       - name: Stop IIS
         run: iisreset /stop
-        
         # shell: pwsh
  
       - name: Deploy to IIS
