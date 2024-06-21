@@ -19,7 +19,7 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o dotnetcorewebapp .\
       - name: Stop IIS
-        run: runas /user:jawad.h /savecred "net stop w3svc"
+        run: runas /user:jawad.h password:Jedi@pac123jun /savecred "net stop w3svc"
         shell: cmd
       - name: Deploy to IIS
         run: |
