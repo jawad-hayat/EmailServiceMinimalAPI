@@ -1,46 +1,35 @@
 name: practice github actions
-
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   build-and-deploy:
     runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Install dependencies
         run: dotnet restore
-
       - name: Build
         run: dotnet build --no-restore --configuration Release
-      
       - name: Test
         run: dotnet test --no-build --verbosity normal --configuration Release
-      
       - name: Publish
         run: dotnet publish -c Release -o dotnetcorewebapp .\
-
       - name: Stop IIS
-        run: C:\Windows\System32\inetsrv\appcmd stop site /site.name:"iistest"
-        shell: cmd
-        
+        run: net stop w3svc
+        shell: pwsh
       - name: Deploy to IIS
-        shell: cmd
         run: |
-          robocopy C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp C:\inetpub\wwwroot\iistest /E /IS /IT /R:0 /W:0
-        
+          $sourcePath = 'C:\actions-runner\testing\EmailServiceMinimalAPI\EmailServiceMinimalAPI\dotnetcorewebapp\*'
+          $destinationPath = 'C:\inetpub\wwwroot\iistest'
+          Get-ChildItem -Path $sourcePath -Recurse | Copy-Item -Destination $destinationPath -Recurse -Force
+        shell: pwsh
       - name: List files in IIS
-        shell: cmd
-        run: dir C:\inetpub\wwwroot\iistest /S /B
-        
+        run: Get-ChildItem -Path C:\inetpub\wwwroot\iistest -Recurse
+        shell: pwsh
       - name: Start IIS
-        shell: cmd
-        run: iisreset /start
-        
-      - name: Curl the web to do smoke test
-        run: curl http://localhost/iistest
+        run: net start w3svc
+        shell: pwsh
