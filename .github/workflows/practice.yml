@@ -35,7 +35,7 @@ jobs:
       - name: Deploy to IIS
         run: |
           iisreset /stop
-          Copy-item dotnetcorewebapp/* c:/inetpub/wwwroot/dotnetcore-webapp -Recurse -Force
+          Copy-Item -Path dotnetcorewebapp\* -Destination C:\inetpub\wwwroot\iistest -Recurse -Force
           iisreset /start
 
       - name: Curl the web to do smoke test
