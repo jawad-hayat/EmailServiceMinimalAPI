@@ -19,8 +19,11 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o dotnetcorewebapp .\
       - name: Stop IIS
-        run: echo Jedi@pac123jun | runas /user:jawad.h /savecred "net stop w3svc"
-        shell: cmd
+        run: |
+          $password = ConvertTo-SecureString "${{ secrets.ADMIN_PASSWORD }}" -AsPlainText -Force
+          $credential = New-Object System.Management.Automation.PSCredential("jawad.h", $password)
+          Start-Process -FilePath "net" -ArgumentList "stop w3svc" -Credential $credential -NoNewWindow -Wait
+        shell: pwsh
 
       - name: Deploy to IIS
         run: |
